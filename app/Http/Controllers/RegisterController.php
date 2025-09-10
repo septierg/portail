@@ -18,41 +18,19 @@ class RegisterController extends Controller
 
     public function register(Request $request)
     {
-       /* $request->validate([
+        $request->validate([
             'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:users',
+            'email' => 'required|email',
             'password' => 'required|string|min:6|confirmed',
-        ]);*/
+        ]);
 
-        // Vérifier si l'utilisateur existe déjà
         $existingUser = User::where('email', $request->email)->first();
 
         if ($existingUser) {
-            // Si l'utilisateur existe déjà, le connecter
-
-            if($existingUser){
-                Auth::login($existingUser);
-
-                // Redirection vers le dashboard (car déjà lié à un business ou cours)
-                return redirect()->route('dashboard');
-            }
-
-        }else{
-
-            // Créer le nouvel utilisateur
-            $user = User::create([
-                'name' => $request->name,
-                'email' => $request->email,
-                'password' => Hash::make($request->password),
-            ]);
-
-            Auth::login($user);
-            // Redirection vers le dashboard
-            return redirect()->route('dashboard');
-
+            Auth::login($existingUser);
+            return redirect()->route('dashboard')->with('info', 'Vous êtes déjà inscrit, vous avez été connecté.');
         }
-/*
-        // Créer le nouvel utilisateur
+
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
@@ -61,15 +39,7 @@ class RegisterController extends Controller
 
         Auth::login($user);
 
-        // Pré-remplir la session pour la création d'entreprise
-        session([
-            'business_name' => $user->name . ' Entreprise',
-            'business_type' => null,
-        ]);
-
-        // Rediriger vers création d’entreprise
-        return redirect()->route('businesses.create');*/
-
+        return redirect()->route('dashboard')->with('success', 'Inscription réussie !');
 
     }
 }
