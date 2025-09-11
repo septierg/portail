@@ -9,25 +9,20 @@ class ProductController extends Controller
 {
     public function index()
     {
-        // Vérifie via la policy
-        $this->authorize('viewAny', Product::class);
-
-        // Récupère l'entreprise de l'utilisateur
+        // Récupère l'entreprise de l'utilisateur connecté
         $business = auth()->user()->currentBusiness();
 
-        // Cette ligne devient facultative car on a déjà vérifié via la policy,
-        // mais tu peux la garder pour charger les données
-        $products = Product::where('business_id', $business->id)->get();
-
-
-        /*$business = auth()->user()->currentBusiness();
-
+        // Si l'utilisateur n'a pas encore d'entreprise
         if (!$business) {
             return redirect()->route('businesses.create')
-                ->with('error', 'Vous devez d’abord créer une entreprise.');
+                ->with('error', 'Vous devez d’abord créer une entreprise pour accéder aux produits.');
         }
 
-        $products = Product::where('business_id', $business->id)->get();*/
+        // Vérifie via la policy si l'utilisateur a le droit
+        $this->authorize('viewAny', Product::class);
+
+        // Récupère les produits liés à son entreprise
+        $products = Product::where('business_id', $business->id)->get();
 
         return view('products.index', compact('products'));
 

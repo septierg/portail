@@ -13,7 +13,6 @@ class ProductPolicy
      */
     public function viewAny(User $user): bool
     {
-        //return $user->role === 'user' || $user->isAdmin();
         // On autorise uniquement les utilisateurs qui ont une entreprise active
         return $user->currentBusiness() !== null;
     }
