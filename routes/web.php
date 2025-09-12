@@ -42,8 +42,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/dashboard-user', [DashboardController::class, 'user'])->name('dashboard-user');//donne le role du user presentement connecter
     Route::get('/dashboard-super-admin', [DashboardController::class, 'super_admin'])->name('dashboard-super-admin');//met le user presentement connecter en superuser
     Route::get('/dashboard-admin', [DashboardController::class, 'admin'])->name('dashboard-admin');//met le user presentement connecter en admin
-    //products
 
+    //products
     //decortiquer le resource product pour que la creation de produit sois exclusivement autoriser au admin
     //cependant la liste de produit/service que l'on peux avoir pour une entreprise dois etre lier au business
     //et accessible au public
@@ -76,18 +76,13 @@ Route::middleware(['auth', 'admin'])->group(function () {
 
 //LIEN ACCESSIBLE AU PUBLIC
 //pour ce faire le admin user dois etre creer, le business dois etre creer, le cours dois etre creer et la on peux partager ce lien
-//Route::middleware('auth')->group(function () {
-    Route::get('/products/{product}/registrations', [CourseRegistrationController::class, 'index'])
+Route::get('/products/{product}/registrations', [CourseRegistrationController::class, 'index'])
     ->name('products.registrations.index')
     ->middleware('auth');
 
-
-
-    Route::get('/product/{product}/registrations/create', [CourseRegistrationController::class, 'create'])->name('products.registrations.create');
-    //Route::get('/product/{course}/registrations/create', [CourseRegistrationController::class, 'create'])->name('courses.registrations.create');
-
-    Route::post('/product/{product}/registrations', [CourseRegistrationController::class, 'store'])->name('products.registrations.store');
-//});
+Route::get('/product/{product}/registrations/create', [CourseRegistrationController::class, 'create'])->name('products.registrations.create');
+Route::post('/product/{product}/registrations', [CourseRegistrationController::class, 'store'])->name('products.registrations.store');
+//FIN LIEN ACCESSIBLE AU PUBLIC
 
 //Login controller
 Route::get('/login/create', [LoginController::class, 'showLoginForm'])->name('login');
