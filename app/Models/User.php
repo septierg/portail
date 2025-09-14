@@ -53,4 +53,10 @@ class User extends Authenticatable
         return $this->role === 'superadmin';
     }
 
+    public function registrations()
+    {
+        return $this->hasMany(Registration::class, 'email', 'email');
+    }
+
+
 }
