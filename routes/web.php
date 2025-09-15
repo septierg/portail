@@ -57,6 +57,8 @@ Route::middleware('auth')->group(function () {
     //businesses
     Route::get('/businesses/create', [BusinessController::class, 'create'])->name('businesses.create');//route businesses/create est disponible aussi si on a deja creer une entreprise, donc relation user has many businesses
     Route::post('/businesses', [BusinessController::class, 'store'])->name('businesses.store');
+    Route::get('/businesses/{business}/edit', [BusinessController::class, 'edit'])->name('businesses.edit');
+    Route::put('/businesses/{id}', [BusinessController::class, 'update'])->name('businesses.update');
 
     //LIVEWIRE @sale
     Route::get('/sales/create-livewire', CreateSale::class)->name('sales.create.livewire');

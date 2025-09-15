@@ -60,6 +60,10 @@
                     🧑‍🤝‍🧑 Gestion des utilisateurs
                     <a href="" class="btn btn-sm btn-primary float-end">Accéder</a>
                 </li>
+                <li class="list-group-item">
+                    🏢 Modifier mon entreprise
+                    <a href="{{ route('businesses.edit', $business->id) }}" class="btn btn-sm btn-warning float-end">Éditer</a>
+                </li>
             </ul>
         </div>
     </div>

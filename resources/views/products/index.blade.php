@@ -16,31 +16,38 @@
     @if ($products->isEmpty())
         <p>Vous n'avez encore enregistré aucun produit ou service.</p>
     @else
-        <table class="table table-bordered">
-            <thead>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Nom</th>
+                <th>Prix (€)</th>
+                <th>Date d'ajout</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach ($products as $product)
                 <tr>
-                    <th>Nom</th>
-                    <th>Prix (€)</th>
-                    <th>Date d'ajout</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach ($products as $product)
-
-                    <tr>
-                        <td>
-                            {{ $product->name }}<br>
+                    <td>
+                        {{ $product->name }}<br>
+                        @if($product->type === 'service')
                             <a href="{{ route('products.registrations.index', ['product' => $product->id]) }}" class="btn btn-sm btn-primary mt-2">
                                 Voir les inscrits
                             </a>
-                        </td>
-                        <td>{{ number_format($product->price, 2) }}</td>
-                        <td>{{ $product->created_at->format('d/m/Y') }}</td>
-                    </tr>
+                        @endif
+                    </td>
+                    <td>{{ number_format($product->price, 2) }}</td>
+                    <td>{{ $product->created_at->format('d/m/Y') }}</td>
+                    <td>
+                        <a href="{{ route('products.edit', $product->id) }}" class="btn btn-sm btn-warning">
+                            ✏️ Éditer
+                        </a>
+                    </td>
+                </tr>
+            @endforeach
+        </tbody>
+    </table>
 
-                @endforeach
-            </tbody>
-        </table>
     @endif
 </div>
 @endsection

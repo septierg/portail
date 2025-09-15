@@ -30,38 +30,11 @@ class DashboardController extends Controller
 
     public function user()
     {
-
-        $user = auth()->user();
-
-        $business = auth()->user()->currentBusiness();
-        $product = Product::with(['business'])->get();
-
-        if(auth()->user()->role === 'user'){
-            $product = null;
-            dd('null');
-        }else{
-             $product = Product::with(['business'])->get();
-        }
-
-
-        // Si l'utilisateur n'a pas encore d'entreprise
-        if (!$business) {
-
-            dd('no business', $product = Product::with(['business'])->get());
-
-
-        }else{
-             dd('yes business',$business);
-        }
-
-
         dd(User::all(),auth()->user()->role);
-
     }
 
     public function super_admin()
     {
-
         $user = auth()->user();
         $user->role = 'superadmin';
         $user->save();
@@ -70,7 +43,6 @@ class DashboardController extends Controller
 
     public function admin()
     {
-
         $user = auth()->user();
         $user->role = 'admin';
         $user->save();

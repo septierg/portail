@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Business;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class BusinessController extends Controller
@@ -85,7 +86,20 @@ class BusinessController extends Controller
      */
     public function edit($id)
     {
-        //
+        $business = Business::findOrFail($id);
+
+        $current_user = User::findOrFail($business->user_id);
+
+        //dd($current_user);
+
+
+//dd($business, $business->user, auth()->id());
+        // Vérifie que l'utilisateur connecté est bien le propriétaire du business ou un admin
+        if ($business->user_id === $current_user && !auth()->user()->isAdmin()) {
+            abort(403, 'Accès non autorisé.');
+        }
+
+        return view('businesses.edit', compact('business'));
     }
 
     /**
@@ -97,7 +111,26 @@ class BusinessController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $business = Business::findOrFail($id);
+
+        // Vérifie que l'utilisateur connecté est bien le propriétaire du business ou un superadmin
+        if (!auth()->user()->isAdmin()) {
+            abort(403, 'Accès non autorisé.');
+        }
+
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'type' => 'required|string|max:255',
+            'email' => 'nullable|email|max:191',
+            'phone' => [
+                'nullable',
+                'regex:/^(\+?\d{1,3}[- ]?)?\d{6,15}$/',
+            ],
+        ]);
+
+        $business->update($validated);
+
+        return redirect()->route('dashboard')->with('success', 'Entreprise mise à jour avec succès.');
     }
 
     /**
